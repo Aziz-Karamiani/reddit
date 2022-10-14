@@ -33,7 +33,8 @@
 
                                 <div class="col-md-6">
                                     <textarea name="description"
-                                              class="form-control @error('description') is-invalid @enderror" id="description"
+                                              class="form-control @error('description') is-invalid @enderror"
+                                              id="description"
                                               cols="30"
                                               rows="10" required>{{ old('description') }}</textarea>
 
@@ -49,11 +50,11 @@
                                 <label for="topics"
                                        class="col-md-4 col-form-label text-md-end">{{ __('Topics') }}</label>
                                 <div class="col-md-6">
-                                    @foreach($topics as $topic)
-                                        <input type="checkbox" name="topics[]"
-                                               value="{{ $topic->id }}"> {{ $topic->name }}
-                                        <br>
-                                    @endforeach
+                                    <select class="form-control select2" name="topics[]" multiple>
+                                        @foreach($topics as $topic)
+                                            <option value="{{ $topic->id }}" name="topics[]">{{ $topic->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 
