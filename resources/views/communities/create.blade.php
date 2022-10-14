@@ -12,7 +12,7 @@
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+                                <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}*</label>
 
                                 <div class="col-md-6">
                                     <input id="name" type="text"
@@ -29,11 +29,13 @@
 
                             <div class="row mb-3">
                                 <label for="description"
-                                       class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                                       class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}*</label>
 
                                 <div class="col-md-6">
-                                    <textarea name="description" class="form-control" id="description" cols="30"
-                                              rows="10"></textarea>
+                                    <textarea name="description"
+                                              class="form-control @error('description') is-invalid @enderror" id="description"
+                                              cols="30"
+                                              rows="10" required>{{ old('description') }}</textarea>
 
                                     @error('description')
                                     <span class="invalid-feedback" role="alert">
@@ -48,7 +50,8 @@
                                        class="col-md-4 col-form-label text-md-end">{{ __('Topics') }}</label>
                                 <div class="col-md-6">
                                     @foreach($topics as $topic)
-                                        <input type="checkbox" name="topics[]" value="{{ $topic->id }}"> {{ $topic->name }}
+                                        <input type="checkbox" name="topics[]"
+                                               value="{{ $topic->id }}"> {{ $topic->name }}
                                         <br>
                                     @endforeach
                                 </div>
