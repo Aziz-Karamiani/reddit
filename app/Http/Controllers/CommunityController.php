@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommunityRequest;
+use App\Http\Requests\UpdateCommunityRequest;
 use App\Models\Community;
 use App\Models\Topic;
 use Illuminate\Contracts\Foundation\Application;
@@ -16,11 +17,13 @@ class CommunityController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return void
+     * @return Application|Factory|View
      */
     public function index()
     {
-        //
+        $communities = Community::where("user_id", auth()->id())->get();
+
+        return view("communities.index", compact('communities'));
     }
 
     /**
@@ -46,7 +49,7 @@ class CommunityController extends Controller
 
         $community->topics()->attach($request->topics);
 
-        return redirect()->route("communities.show", $community);
+        return redirect()->route('communities.index')->with(["message" => "Community Updated Successfully.", "class" => "success"]);
     }
 
     /**
@@ -63,34 +66,50 @@ class CommunityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     * @return void
+     * @param Community $community
+     * @return Application|Factory|View
      */
-    public function edit($id)
+    public function edit(Community $community)
     {
-        //
+        if ($community->user_id !== auth()->id())
+            abort(403);
+
+        $topics = Topic::all();
+        return view('communities.edit', compact('community', 'topics'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param int $id
-     * @return void
+     * @param UpdateCommunityRequest $request
+     * @param Community $community
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCommunityRequest $request, Community $community)
     {
-        //
+        if ($community->user_id !== auth()->id())
+            abort(403);
+
+        $community->update($request->validated());
+        $community->topics()->sync($request->topics);
+
+        return redirect()->route('communities.index')->with(["message" => "Community Updated Successfully.", "class" => "success"]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return void
+     * @param Community $community
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Community $community)
     {
-        //
+        if ($community->user_id !== auth()->id())
+            abort(403);
+
+        $community->delete();
+        $community->topics()->detach();
+
+        return redirect()->route('communities.index')->with(["message" => "Community Deleted Successfully.", "class" => "success"]);
     }
 }
