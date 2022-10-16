@@ -60,7 +60,7 @@ class CommunityController extends Controller
      */
     public function show(Community $community)
     {
-        $posts = $community->posts()->latest()->paginate(2);
+        $posts = $community->posts()->latest()->paginate(10);
         return view('communities.show', compact('community', 'posts'));
     }
 

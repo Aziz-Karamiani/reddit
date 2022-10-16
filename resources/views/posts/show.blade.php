@@ -14,6 +14,15 @@
                             </div>
                         @endif
                         <p>{{ $post->post_text }}</p>
+
+                        <hr>
+                        <a href="{{ route("communities.posts.edit", [$community, $post]) }}"
+                           class="btn btn-sm btn-primary">Edit Post</a>
+                        <form action="{{ route("communities.posts.destroy", [$community, $post]) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method("DELETE")
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete Post</button>
+                        </form>
                     </div>
                 </div>
             </div>

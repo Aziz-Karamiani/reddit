@@ -9,7 +9,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class CommunityPostController extends Controller
 {
@@ -71,34 +70,41 @@ class CommunityPostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Community $community
+     * @param Post $post
+     * @return Application|Factory|View
      */
-    public function edit($id)
+    public function edit(Community $community, Post $post)
     {
-        //
+        return view('posts.edit', compact('post','community'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param StorePostRequest $request
+     * @param Community $community
+     * @param Post $post
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(StorePostRequest $request, Community $community, Post $post)
     {
-        //
+        $post->update($request->validated());
+
+        return redirect()->route('communities.show', compact('community'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Community $community
+     * @param Post $post
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Community $community, Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route('communities.show', compact('community'));
     }
 }
