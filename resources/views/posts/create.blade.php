@@ -8,7 +8,7 @@
                     <div class="card-header">{{ $community->name . __(': Create Post') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('communities.posts.store', $community) }}">
+                        <form method="POST" action="{{ route('communities.posts.store', $community) }}" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row mb-3">

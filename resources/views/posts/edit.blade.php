@@ -8,7 +8,7 @@
                     <div class="card-header">{{ $post->title }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('communities.posts.update', [$community, $post]) }}">
+                        <form method="POST" action="{{ route('communities.posts.update', [$community, $post]) }}" enctype="multipart/form-data">
                             @csrf
                             @method("PUT")
 
