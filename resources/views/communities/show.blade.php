@@ -7,7 +7,11 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <span class>{{ $community->name }}</span>
-                        <a href="{{ route("communities.posts.create", $community) }}" class="btn btn-sm btn-primary">Add Post</a>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ route('communities.show', $community) }}" class="@if(request('sort', '') != 'popular') text-bg-dark @endif m-1">Newest Post</a>
+                            <a href="{{ route('communities.show', $community) . "?sort=popular" }}" class="@if(request('sort', '') == 'popular') text-bg-dark @endif m-1">Popular Post</a>
+                            <a href="{{ route("communities.posts.create", $community) }}" class="btn btn-sm btn-primary">Add Post</a>
+                        </div>
                     </div>
 
                     <div class="card-body">
@@ -26,6 +30,7 @@
                                     <a href="{{ route("communities.posts.show", [$community, $post]) }}" class="link">
                                         <h2>{{ $post->title }}</h2>
                                     </a>
+                                    <p>{{ $post->created_at->diffForHumans() }}</p>
                                     <p>{{ \Illuminate\Support\Str::words($post->post_text, 10) }}</p>
                                 </div>
                                 <hr>

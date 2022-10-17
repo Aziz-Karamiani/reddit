@@ -60,7 +60,13 @@ class CommunityController extends Controller
      */
     public function show(Community $community)
     {
-        $posts = $community->posts()->latest()->paginate(10);
+        $query = $community->posts();
+        if (request('sort', '') == 'popular') {
+            $posts = $query->orderByDesc('votes')->paginate(10);
+        } else {
+            $posts = $query->latest()->paginate(10);
+        }
+
         return view('communities.show', compact('community', 'posts'));
     }
 
