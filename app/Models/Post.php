@@ -11,4 +11,9 @@ class Post extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ["community_id", "user_id", "title", "post_text", "post_url", "post_image"];
+
+    public function votes()
+    {
+        return $this->hasMany(PostVote::class);
+    }
 }

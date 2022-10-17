@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Models\Community;
 use App\Models\Post;
+use App\Models\PostVote;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -124,5 +125,24 @@ class CommunityPostController extends Controller
         $post->delete();
 
         return redirect()->route('communities.show', compact('community'));
+    }
+
+    /**
+     * @param Post $post
+     * @param int $vote
+     * @return RedirectResponse
+     */
+    public function vote(Post $post, int $vote)
+    {
+        if ($post->user_id != auth()->id() && in_array($vote, [1, -1]) && !PostVote::where(['post_id' => $post->id, 'user_id' => auth()->id()])->exists()){
+            $post->votes()->create([
+                'user_id' => auth()->id(),
+                'vote' => $vote
+            ]);
+
+            $post->increment('votes', $vote);
+        }
+
+        return redirect()->back();
     }
 }
