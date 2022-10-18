@@ -72,6 +72,7 @@ class CommunityPostController extends Controller
      */
     public function show(Community $community, Post $post)
     {
+        $post->load('comments.user');
         return view('posts.show', compact('post','community'));
     }
 
