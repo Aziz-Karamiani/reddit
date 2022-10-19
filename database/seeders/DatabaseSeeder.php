@@ -22,5 +22,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(TopicSeeder::class);
+        $this->call(UsersSeeder::class);
+        $this->call(CommunitySeeder::class);
+        $this->call(PostsSeeder::class);
+        $this->call(PostVotesSeeder::class);
     }
 }
