@@ -73,7 +73,7 @@ class CommunityPostController extends Controller
     public function show(Community $community, Post $post)
     {
         $post->load('comments.user');
-        return view('posts.show', compact('post','community'));
+        return view('posts.show', compact('post', 'community'));
     }
 
     /**
@@ -85,7 +85,10 @@ class CommunityPostController extends Controller
      */
     public function edit(Community $community, Post $post)
     {
-        return view('posts.edit', compact('post','community'));
+        if ($post->user_id != auth()->id())
+            abort(403);
+
+        return view('posts.edit', compact('post', 'community'));
     }
 
     /**
@@ -98,6 +101,9 @@ class CommunityPostController extends Controller
      */
     public function update(StorePostRequest $request, Community $community, Post $post)
     {
+        if ($post->user_id != auth()->id())
+            abort(403);
+
         $post->update($request->validated());
 
         // Upload post image if exists
@@ -123,6 +129,9 @@ class CommunityPostController extends Controller
      */
     public function destroy(Community $community, Post $post)
     {
+        if ($post->user_id != auth()->id())
+            abort(403);
+
         $post->delete();
 
         return redirect()->route('communities.show', compact('community'));
@@ -135,7 +144,7 @@ class CommunityPostController extends Controller
      */
     public function vote(Post $post, int $vote)
     {
-        if ($post->user_id != auth()->id() && in_array($vote, [1, -1]) && !PostVote::where(['post_id' => $post->id, 'user_id' => auth()->id()])->exists()){
+        if ($post->user_id != auth()->id() && in_array($vote, [1, -1]) && !PostVote::where(['post_id' => $post->id, 'user_id' => auth()->id()])->exists()) {
             $post->votes()->create([
                 'user_id' => auth()->id(),
                 'vote' => $vote
