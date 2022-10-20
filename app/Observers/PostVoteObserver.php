@@ -14,6 +14,6 @@ class PostVoteObserver
      */
     public function created(PostVote $postVote)
     {
-        $postVote->post()->increment('votes', 1);
+        $postVote->post()->increment('votes', $postVote->vote);
     }
 }
