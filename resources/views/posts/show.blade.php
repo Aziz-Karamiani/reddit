@@ -46,12 +46,12 @@
             </div>
 
             <hr>
-            @if($post->user_id === auth()->id())
+            @can('edit-post', $post)
                 <a href="{{ route("communities.posts.edit", [$community, $post]) }}"
                    class="btn btn-sm btn-primary">Edit Post</a>
-            @endif
+            @endcan
 
-            @if(in_array(auth()->id(), [$post->user_id, $community->user_id]))
+            @can('delete-post', $post)
                 <form action="{{ route("communities.posts.destroy", [$community, $post]) }}"
                       method="POST"
                       class="d-inline">
@@ -62,7 +62,7 @@
                         Post
                     </button>
                 </form>
-            @endif
+            @endcan
         </div>
     </div>
 @endsection

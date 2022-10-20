@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 
 class CommunityPostController extends Controller
 {
@@ -85,7 +86,7 @@ class CommunityPostController extends Controller
      */
     public function edit(Community $community, Post $post)
     {
-        if ($post->user_id != auth()->id())
+        if (Gate::denies('edit-post', $post))
             abort(403);
 
         return view('posts.edit', compact('post', 'community'));
@@ -101,7 +102,7 @@ class CommunityPostController extends Controller
      */
     public function update(StorePostRequest $request, Community $community, Post $post)
     {
-        if ($post->user_id != auth()->id())
+        if (Gate::denies('edit-post', $post))
             abort(403);
 
         $post->update($request->validated());
@@ -129,7 +130,7 @@ class CommunityPostController extends Controller
      */
     public function destroy(Community $community, Post $post)
     {
-        if ($post->user_id != auth()->id())
+        if (Gate::denies('delete-post', $post))
             abort(403);
 
         $post->delete();
