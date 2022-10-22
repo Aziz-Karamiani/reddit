@@ -17,7 +17,7 @@ class Post extends Model
     /**
      * @return HasMany
      */
-    public function votes()
+    public function postVotes()
     {
         return $this->hasMany(PostVote::class);
     }

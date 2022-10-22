@@ -146,7 +146,7 @@ class CommunityPostController extends Controller
     public function vote(Post $post, int $vote)
     {
         if ($post->user_id != auth()->id() && in_array($vote, [1, -1]) && !PostVote::where(['post_id' => $post->id, 'user_id' => auth()->id()])->exists()) {
-            $post->votes()->create([
+            $post->postVotes()->create([
                 'user_id' => auth()->id(),
                 'vote' => $vote
             ]);
